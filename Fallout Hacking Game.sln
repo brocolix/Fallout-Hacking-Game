@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fallout Hacking Game", "Fallout Hacking Game\Fallout Hacking Game.csproj", "{89E06F3E-6DE1-4DD3-B7F7-B5E0516DBCF7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89E06F3E-6DE1-4DD3-B7F7-B5E0516DBCF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89E06F3E-6DE1-4DD3-B7F7-B5E0516DBCF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89E06F3E-6DE1-4DD3-B7F7-B5E0516DBCF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89E06F3E-6DE1-4DD3-B7F7-B5E0516DBCF7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14689D2C-57BA-4449-BF0F-43B74234A4A3}
+	EndGlobalSection
+EndGlobal
