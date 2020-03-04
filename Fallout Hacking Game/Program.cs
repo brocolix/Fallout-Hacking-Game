@@ -7,10 +7,13 @@ namespace Fallout_Hacking_Game
     {
         static void Main(string[] args)
         {
+            // hledane heslo
             string password;
+            // maximalni pocet pokusu
             int maxAttempts;
-            int maxLetters;
-            List<string> items = new List<string>()
+            // maximalni pocet znaku na radce
+            int rowsWidth;
+            List<string> fakeWords = new List<string>()
             {
                 "same",
                 "fear",
@@ -24,12 +27,17 @@ namespace Fallout_Hacking_Game
             };
 
             password = "game";
-            maxAttempts = 3;
-            maxLetters = 12;
-            items.Add(password);
+            maxAttempts = 5;
+            rowsWidth = 24;
 
-            // vytvorim instanci herniho pole a predam ji pozadovane parametry
-            Field field = new Field(maxLetters, items);
+            // prida heslo da listu s dalsimi slovy 
+            fakeWords.Add(password);
+
+            // promicha slova
+            Helper.Shuffle<string>(fakeWords);
+
+            // vytvori instanci herniho pole a preda ji pozadovane parametry
+            Field field = new Field(rowsWidth, fakeWords);
 
             // vytvorim instanci hry a predam ji instanci herniho pole a dalsi parametry
             Game game = new Game(field, maxAttempts, password);

@@ -39,8 +39,16 @@ namespace Fallout_Hacking_Game
                 HandleClick(cKey);
             }
 
-            Console.Clear();
-            Console.WriteLine("GAME OVER");
+            // pokud mam jeste nejakej zivot tak jsem to uhadnul
+            if(currentAttempts > 0)
+            {
+                Console.Clear();
+                Console.WriteLine("WINNER WINNER CHICKEN DINNER");
+            } else
+            {
+                Console.Clear();
+                Console.WriteLine("GAME OVER");
+            }
         }
 
 
@@ -78,13 +86,11 @@ namespace Fallout_Hacking_Game
             // zpracovani klavesy sipka enter
             else if (cKey.Key == ConsoleKey.Enter)
             {
-                // implementace akce porovnani pass a polozky
-                // ziskam text z polozky a pozovnam s heslem
+                // implementace akce porovnani pass a slova
+                // ziskam slovo a pozovnam s heslem
                 // pokud se schodoje vyhral jsem
-                if (ComparePassAndValue(password, field.getRowValue(selected)))
+                if (ComparePassAndValue(password, field.GetRowWord(selected)))
                 {
-                    Console.Clear();
-                    Console.WriteLine("WINNER WINNER CHICKEN DINNER");
                     loop = false;
                     return;
                 }
@@ -92,41 +98,58 @@ namespace Fallout_Hacking_Game
                 // pokud je nejaka podobnost ve znacich tak vypisu pocet stejnych znaku
                 else
                 {
-                    //minus zivot
-                    currentAttempts--;
-                    Console.SetCursorPosition(0, 2);
-                    Console.Write(new string(' ', Console.WindowWidth));
-                    Console.SetCursorPosition(0, Console.CursorTop);
-                    Console.WriteLine("Attempts left: " + ParseIntToGrid(currentAttempts));
-
-                    int likeness = TestLikeness(password, field.getRowValue(selected));
-                    Console.SetCursorPosition(0, 20);
-                    Console.WriteLine("> Incorrect!");
-                    Console.WriteLine("> Likeness: " + likeness);
-                    Console.WriteLine("> " + field.getRowValue(selected));
+                    // spatny pokus
+                    FailedAttempt();
                 }
             }
 
-            // oznacim polozku
-            // zvyraznim radek s indexem
-            field.HighLightRow(selected);
+            // oznacim slovo
+            field.HighlightRow(selected);
 
             // znovu renderuju pozadovany radek
             field.ReDrawRow(selected);
 
-            // resetuju minulou polozku
-            field.HighLightRow(lastSelected);
+            // resetuji zvyrazneni minuleho slova
+            field.HighlightRow(lastSelected);
 
-            // znovu renderuju pozadovany radek
+            // znovu renderuju pozadovany radek se slovem
             field.ReDrawRow(lastSelected);
 
 
         }
 
-        // porovna pocet stejnych znaku v heslu a fake polozce
-        private int TestLikeness(string password, string value)
+        private void FailedAttempt()
         {
-            return 2;
+            currentAttempts--;
+
+            Console.SetCursorPosition(0, 2);
+            Console.Write(new string(' ', Console.WindowWidth));
+            Console.SetCursorPosition(0, Console.CursorTop);
+            Console.WriteLine("Attempts left: " + ParseIntToGrid(currentAttempts));
+
+            // podobnost slova s heslem
+            int likeness = TestLikeness(field.GetRowWord(selected));
+            Console.SetCursorPosition(0, field.CountRows() + 6);
+            Console.WriteLine("> Incorrect!");
+            Console.WriteLine("> Likeness: " + likeness);
+            Console.WriteLine("> " + field.GetRowWord(selected));
+        }
+
+        // porovna pocet stejnych znaku v heslu a fake polozce
+        private int TestLikeness(string value)
+        {
+            int res = 0;
+            for (int i = 0; i < password.Length; i++)
+            {
+                for (int j = 0; j < value.Length; j++)
+                {
+                    if(password[i] == value[j])
+                    {
+                        res++;
+                    }
+                }
+            }
+            return res;
         }
 
         private bool ComparePassAndValue(string password, string value)

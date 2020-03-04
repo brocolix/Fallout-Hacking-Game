@@ -7,28 +7,60 @@ namespace Fallout_Hacking_Game
     // trida reprezentuje radek v hernim poly
     class Row
     {
-        public string text;
-        private int prefix;
-        private int postfix;
+        public string word;
         private int index;
+        private string memAddr;
         private Random rnd;
         private bool mark;
 
-        public Row(string text, int maxLetters, int index)
+        private List<char> prefixStore;
+        private List<char> postfixStore;
+
+        public Row(string word, int rowsWidth, int index)
         {
-            this.text = text;
+            this.word = word;
             this.index = index;
             // nevim zda nevyclenit do zvlastni metody az po konstrukci
             rnd = new Random();
-            prefix = rnd.Next(1, maxLetters - text.Length);
+            prefixStore = GetPrefixList(rowsWidth);
+            postfixStore = GetPostfixList(prefixStore.Count, rowsWidth);
+            memAddr = GetMemAddr();
             mark = false;
-            postfix = CalculatePostfix(prefix, maxLetters);
         }
 
-        private int CalculatePostfix(int num, int range)
+        private string GetMemAddr()
         {
-            int result = range - (num + this.text.Length);
-            return result;
+            string i = index.ToString();
+            return "0xF3C80" + i;
+        }
+
+        private List<char> GetPrefixList(int maxSize)
+        {
+            int prefixQuantity = rnd.Next(1, maxSize - word.Length);
+            List<char> arr = new List<char>();
+            for (int i=0; i<prefixQuantity; i++)
+            {
+                int rndChar = rnd.Next(0, 6);
+                char e = (char)(33 + rndChar);
+                arr.Add(e);
+            }
+
+            return arr;
+
+        } 
+
+        private List<char> GetPostfixList(int num, int range)
+        {
+            int postfixQuantity = range - (num + word.Length);
+            List<char> arr = new List<char>();
+            for (int i = 0; i < postfixQuantity; i++)
+            {
+                int rndChar = rnd.Next(0, 6);
+                char e = (char)(33 + rndChar);
+                arr.Add(e);
+            }
+
+            return arr;
         }
 
         public void Highlight()
@@ -43,19 +75,16 @@ namespace Fallout_Hacking_Game
             }
         }
 
-        public void Render(bool reRender = false)
-        {
-            if(reRender == true)
-            {
-                Console.SetCursorPosition(0,index + 4);
-            }
+        public void Render()
+        {           
+            Console.SetCursorPosition(0,index + 4);
+            
 
-            Console.Write("0xF2316C ");
+            Console.Write("{0} ", memAddr);
 
-            for (int i = 0; i < prefix; i++)
+            for (int i = 0; i < prefixStore.Count; i++)
             {
-                // doimplementovat generovani znaku z ascii
-                Console.Write("o");
+                Console.Write(prefixStore[i]);
             }
 
             if(mark == true)
@@ -63,14 +92,14 @@ namespace Fallout_Hacking_Game
                 Console.BackgroundColor = ConsoleColor.Gray;
                 Console.ForegroundColor = ConsoleColor.Black;
             }
-            Console.Write(text);
+
+            Console.Write(word);
 
             Console.ResetColor();
 
-            for (int i = 0; i < postfix; i++)
+            for (int i = 0; i < postfixStore.Count; i++)
             {
-                // doimplementovat generovani znaku z ascii
-                Console.Write("i");
+                Console.Write(postfixStore[i]);
             }
         }
     }

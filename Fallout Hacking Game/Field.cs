@@ -8,26 +8,26 @@ namespace Fallout_Hacking_Game
     class Field
     {
         // maximalni pocet znaku na radce
-        private int maxLetters;
+        private int rowsWidth;
 
         // list napleny instancemi radku
         private List<Row> rowsStore;
 
         // konstruktor 
-        public Field(int maxLetters, List<string> items)
+        public Field(int rowsWidth, List<string> words)
         {
-            this.maxLetters = maxLetters;
-            CreateRows(items);
+            this.rowsWidth = rowsWidth;
+            CreateRows(words);
         }
 
         // naplni promenou s tabulkou radky
-        private void CreateRows(List<string> items)
+        private void CreateRows(List<string> words)
         {
-            rowsStore = new List<Row>(items.Count);
+            rowsStore = new List<Row>(words.Count);
 
-            for(int i=0; i < items.Count; i++)
+            for(int i=0; i < words.Count; i++)
             {
-                Row row = new Row(items[i], maxLetters, i);
+                Row row = new Row(words[i], rowsWidth, i);
                 // prvni polozka aktivni
                 if (i == 0)
                 {
@@ -37,13 +37,15 @@ namespace Fallout_Hacking_Game
             }
         }
 
-        public string getRowValue(int row)
+
+        // ziska slovo ze zadaneho radku
+        public string GetRowWord(int row)
         {
-            return rowsStore[row].text;
+            return rowsStore[row].word;
         }
 
         // zvyrazni dany radek
-        public void HighLightRow(int index)
+        public void HighlightRow(int index)
         {
             rowsStore[index].Highlight();
             // resetuju zvyrazneni pro radky
@@ -51,7 +53,7 @@ namespace Fallout_Hacking_Game
 
         public void ReDrawRow(int index)
         {
-            rowsStore[index].Render(true);
+            rowsStore[index].Render();
         }
 
         // vrati pocet radku v tabulce
